@@ -1,0 +1,151 @@
+{
+	"metadata": {
+		"type": "App"
+	},
+	"project": {
+		"shadows": true,
+		"vr": false
+	},
+	"camera": {
+		"metadata": {
+			"version": 4.5,
+			"type": "Object",
+			"generator": "Object3D.toJSON"
+		},
+		"object": {
+			"uuid": "9A32CAFD-29D4-417A-8047-F90F7C865244",
+			"type": "PerspectiveCamera",
+			"name": "Camera",
+			"layers": 1,
+			"matrix": [0.822502,0,0.568762,0,0.159173,0.960041,-0.230185,0,-0.546035,0.279859,0.789636,0,-6.692036,3.493793,9.677532,1],
+			"fov": 50,
+			"zoom": 1,
+			"near": 0.01,
+			"far": 1000,
+			"focus": 10,
+			"aspect": 2.368421,
+			"filmGauge": 35,
+			"filmOffset": 0
+		}
+	},
+	"scene": {
+		"metadata": {
+			"version": 4.5,
+			"type": "Object",
+			"generator": "Object3D.toJSON"
+		},
+		"geometries": [
+			{
+				"uuid": "39031CA8-BEB0-4071-B72E-D02D90AD8A1B",
+				"type": "SphereBufferGeometry",
+				"radius": 1,
+				"widthSegments": 16,
+				"heightSegments": 16,
+				"phiStart": 0,
+				"phiLength": 6.283185,
+				"thetaStart": 0,
+				"thetaLength": 3.141593
+			}],
+		"materials": [
+			{
+				"uuid": "457AB06B-9440-4E68-9F73-B3D868CAC916",
+				"type": "MeshToonMaterial",
+				"color": 16007990,
+				"emissive": 0,
+				"specular": 1118481,
+				"shininess": 0,
+				"depthFunc": 3,
+				"depthTest": true,
+				"depthWrite": true
+			}],
+		"object": {
+			"uuid": "31517222-A9A7-4EAF-B5F6-60751C0BABA3",
+			"type": "Scene",
+			"name": "Scene",
+			"layers": 1,
+			"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+			"children": [
+				{
+					"uuid": "E2DEED9E-56B9-42D6-8913-10AEC0184F83",
+					"type": "Group",
+					"name": "Precession",
+					"layers": 1,
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+					"children": [
+						{
+							"uuid": "E2745F9B-4A62-4154-9F80-9A67F619BD40",
+							"type": "Group",
+							"name": "Proton",
+							"layers": 1,
+							"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+							"children": [
+								{
+									"uuid": "620988DC-59FE-4465-AC20-E09DAEADA148",
+									"type": "Mesh",
+									"name": "Sphere",
+									"layers": 1,
+									"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+									"geometry": "39031CA8-BEB0-4071-B72E-D02D90AD8A1B",
+									"material": "457AB06B-9440-4E68-9F73-B3D868CAC916"
+								},
+								{
+									"uuid": "F0B32D0B-2030-4F0B-B7BA-CD297E625E2D",
+									"type": "DirectionalLight",
+									"name": "DirectionalLight",
+									"layers": 1,
+									"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,5,0,1],
+									"color": 16777215,
+									"intensity": 1,
+									"shadow": {
+										"camera": {
+											"uuid": "DF56ED40-2286-4247-A25A-4193FDC8B15F",
+											"type": "OrthographicCamera",
+											"layers": 1,
+											"zoom": 1,
+											"left": -5,
+											"right": 5,
+											"top": 5,
+											"bottom": -5,
+											"near": 0.5,
+											"far": 500
+										}
+									}
+								}]
+						}]
+				},
+				{
+					"uuid": "DABD860F-BA70-4571-9F10-D08C4AAA045D",
+					"type": "PerspectiveCamera",
+					"name": "PerspectiveCamera",
+					"layers": 1,
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+					"fov": 50,
+					"zoom": 1,
+					"near": 0.1,
+					"far": 2000,
+					"focus": 10,
+					"aspect": 2.368421,
+					"filmGauge": 35,
+					"filmOffset": 0
+				}],
+			"background": 11184810
+		}
+	},
+	"scripts": {
+		"31517222-A9A7-4EAF-B5F6-60751C0BABA3": [
+			{
+				"name": "",
+				"source": "var proton = this.getObjectByName(\"Proton\");\nvar precession = this.getObjectByName(\"Precession\");\nvar precess = false\nvar state = 0;\nvar start_y_time = 0;\nvar start_z_time = 0;\n\nfunction update( event ) {\n\tvar time = performance.now() / 1000;\n\tswitch( state ) {\n\t\tcase 0:\n\t\t\tbreak;\n\t\tcase 1:\n\t\t\t// Show Precession\n\t\t\tproton.rotation.y = time - start_y_time;\n\t\t\tbreak;\n\t\tcase 2:\n\t\t\t// Show effect of B0 field\n\t\t\tproton.rotation.y = time - start_y_time;\n\t\t\tproton.rotation.z = (time - start_z_time) / 5;\n\t\t\tbreak;\n\t\tcase 3:\n\t\t\t// remove precession\n\t\t\tproton.rotation.z = (time - start_z_time) / 5;\n\t\t\tbreak;\n\t\tcase 4:\n\t\t\t// demonstrate t1\n\t\t\tproton.rotation.z += -0.01 * ((time - start_z_time) / 5) * proton.rotation.z;\n\t};\n}\n\nfunction mouseup( event ) {\n\tswitch( state ) {\n\t\tcase 0:\n\t\t\tstart_y_time = performance.now() / 1000;\n\t\t\tvar quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0, 0, 1), Math.random(-Math.PI, Math.PI) );\n\t\t\tproton.applyQuaternion(quaternion);\n\t\t\tvar precession_geometry = new THREE.Geometry();\n\t\t\tprecession_geometry.vertices.push(new THREE.Vector3(0, 100, 0), new THREE.Vector3(0, -100, 0));\n\t\t\tvar precession_axis = new THREE.Line(\n\t\t\t\tprecession_geometry,\n\t\t\t\tnew THREE.LineBasicMaterial({color: 0x00BCD4})\n\t\t\t);\n\t\t\tscene.add(precession_axis);\n\t\t\tbreak;\n\t\tcase 1:\n\t\t\tstart_z_time = performance.now() / 1000 - proton.rotation.z * 5;\n\t\t\t//console.log(proton.rotation);\n\t\t\tproton.children[3].visible = true;\n\t\t\tbreak;\n\t\tcase 2:\n\t\t\tbreak;\n\t\tcase 3:\n\t\t\tproton.children[3].visible = false;\n\t\t\tbreak;\n\t\tdefault:\n\t\t\tstate=0;\n\t};\n\tstate++;\n\tconsole.log(state);\n}\n\nfunction mousedown( event ) {\n\tswitch( state ) {\n\t\tcase 0:\n\t\t\tbreak;\n\t\tcase 1:\n\t\t\tconsole.log(proton.rotation);\n\t\t\tbreak;\n\t\tcase 2:\n\t\tdefault:\n\t\t\tbreak;\n\t};\n}"
+			}],
+		"620988DC-59FE-4465-AC20-E09DAEADA148": [
+			{
+				"name": "",
+				"source": "//\nfunction update( event ) {\n\tvar time = performance.now() / 1000;\n\tthis.rotation.y = time*20;\n}"
+			}],
+		"E2745F9B-4A62-4154-9F80-9A67F619BD40": [
+			{
+				"name": "",
+				"source": "var Arrow  = new THREE.ArrowHelper(\n\tnew THREE.Vector3(0, 1, 0),\n\tnew THREE.Vector3(0, -5, 0),\n\t10,\n\t0x212121,\n\t1,\n\t0.2\n);\nvar b0_arrow = new THREE.ArrowHelper(\n\t\t\t\tnew THREE.Vector3(-1, 0, 0),\n\t\t\t\tnew THREE.Vector3(0, 5, 0),\n\t\t\t\t2,\n\t\t\t\t0xFF5722\n\t\t\t);\n\t\t\tb0_arrow.visible = false;\n\nthis.add(Arrow);\nthis.add(b0_arrow);\n\nfunction update( event ) {}"
+			}]
+	}
+}
