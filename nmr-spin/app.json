@@ -13,17 +13,17 @@
 			"generator": "Object3D.toJSON"
 		},
 		"object": {
-			"uuid": "9A32CAFD-29D4-417A-8047-F90F7C865244",
+			"uuid": "CE09C632-4CAE-4823-B6B6-EBCA2ECFE4F1",
 			"type": "PerspectiveCamera",
 			"name": "Camera",
 			"layers": 1,
-			"matrix": [0.822502,0,0.568762,0,0.159173,0.960041,-0.230185,0,-0.546035,0.279859,0.789636,0,-6.692036,3.493793,9.677532,1],
+			"matrix": [0.724482,0,-0.689294,0,-0.309554,0.893487,-0.325357,0,0.615875,0.449089,0.647315,0,9.860922,7.190481,10.364325,1],
 			"fov": 50,
 			"zoom": 1,
 			"near": 0.01,
 			"far": 1000,
 			"focus": 10,
-			"aspect": 2.368421,
+			"aspect": 2.354651,
 			"filmGauge": 35,
 			"filmOffset": 0
 		}
@@ -54,9 +54,37 @@
 				"emissive": 0,
 				"specular": 1118481,
 				"shininess": 0,
+				"map": "1BDC9547-0201-46C2-B505-3B6CDFAFE82C",
 				"depthFunc": 3,
 				"depthTest": true,
-				"depthWrite": true
+				"depthWrite": true,
+				"skinning": true
+			}],
+		"textures": [
+			{
+				"uuid": "1BDC9547-0201-46C2-B505-3B6CDFAFE82C",
+				"name": "",
+				"mapping": 300,
+				"repeat": [1,1],
+				"offset": [0,0],
+				"center": [0,0],
+				"rotation": 0,
+				"wrap": [1001,1001],
+				"format": 1023,
+				"type": 1009,
+				"encoding": 3001,
+				"minFilter": 1008,
+				"magFilter": 1006,
+				"anisotropy": 1,
+				"flipY": true,
+				"premultiplyAlpha": false,
+				"unpackAlignment": 4,
+				"image": "032C3D77-2F20-4504-9048-CA8EA89A9F93"
+			}],
+		"images": [
+			{
+				"uuid": "032C3D77-2F20-4504-9048-CA8EA89A9F93", 
+				"url": "images/linear_gradient.png"
 			}],
 		"object": {
 			"uuid": "31517222-A9A7-4EAF-B5F6-60751C0BABA3",
@@ -92,10 +120,11 @@
 									"uuid": "F0B32D0B-2030-4F0B-B7BA-CD297E625E2D",
 									"type": "DirectionalLight",
 									"name": "DirectionalLight",
+									"visible": false,
 									"layers": 1,
 									"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,5,0,1],
 									"color": 16777215,
-									"intensity": 1,
+									"intensity": 0,
 									"shadow": {
 										"camera": {
 											"uuid": "DF56ED40-2286-4247-A25A-4193FDC8B15F",
@@ -114,28 +143,22 @@
 						}]
 				},
 				{
-					"uuid": "DABD860F-BA70-4571-9F10-D08C4AAA045D",
-					"type": "PerspectiveCamera",
-					"name": "PerspectiveCamera",
+					"uuid": "2BBD6D68-957C-4643-8AAE-BD528CFDAA5A",
+					"type": "AmbientLight",
+					"name": "AmbientLight",
 					"layers": 1,
-					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
-					"fov": 50,
-					"zoom": 1,
-					"near": 0.1,
-					"far": 2000,
-					"focus": 10,
-					"aspect": 2.368421,
-					"filmGauge": 35,
-					"filmOffset": 0
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-4.675148,0,0,1],
+					"color": 15790571,
+					"intensity": 1
 				}],
-			"background": 11184810
+			"background": 15790571
 		}
 	},
 	"scripts": {
 		"31517222-A9A7-4EAF-B5F6-60751C0BABA3": [
 			{
-				"name": "",
-				"source": "var proton = this.getObjectByName(\"Proton\");\nvar precession = this.getObjectByName(\"Precession\");\nvar precess = false\nvar state = 0;\nvar start_y_time = 0;\nvar start_z_time = 0;\n\nfunction update( event ) {\n\tvar time = performance.now() / 1000;\n\tswitch( state ) {\n\t\tcase 0:\n\t\t\tbreak;\n\t\tcase 1:\n\t\t\t// Show Precession\n\t\t\tproton.rotation.y = time - start_y_time;\n\t\t\tbreak;\n\t\tcase 2:\n\t\t\t// Show effect of B0 field\n\t\t\tproton.rotation.y = time - start_y_time;\n\t\t\tproton.rotation.z = (time - start_z_time) / 5;\n\t\t\tbreak;\n\t\tcase 3:\n\t\t\t// remove precession\n\t\t\tproton.rotation.z = (time - start_z_time) / 5;\n\t\t\tbreak;\n\t\tcase 4:\n\t\t\t// demonstrate t1\n\t\t\tproton.rotation.z += -0.01 * ((time - start_z_time) / 5) * proton.rotation.z;\n\t};\n}\n\nfunction mouseup( event ) {\n\tswitch( state ) {\n\t\tcase 0:\n\t\t\tstart_y_time = performance.now() / 1000;\n\t\t\tvar quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0, 0, 1), Math.random(-Math.PI, Math.PI) );\n\t\t\tproton.applyQuaternion(quaternion);\n\t\t\tvar precession_geometry = new THREE.Geometry();\n\t\t\tprecession_geometry.vertices.push(new THREE.Vector3(0, 100, 0), new THREE.Vector3(0, -100, 0));\n\t\t\tvar precession_axis = new THREE.Line(\n\t\t\t\tprecession_geometry,\n\t\t\t\tnew THREE.LineBasicMaterial({color: 0x00BCD4})\n\t\t\t);\n\t\t\tscene.add(precession_axis);\n\t\t\tbreak;\n\t\tcase 1:\n\t\t\tstart_z_time = performance.now() / 1000 - proton.rotation.z * 5;\n\t\t\t//console.log(proton.rotation);\n\t\t\tproton.children[3].visible = true;\n\t\t\tbreak;\n\t\tcase 2:\n\t\t\tbreak;\n\t\tcase 3:\n\t\t\tproton.children[3].visible = false;\n\t\t\tbreak;\n\t\tdefault:\n\t\t\tstate=0;\n\t};\n\tstate++;\n\tconsole.log(state);\n}\n\nfunction mousedown( event ) {\n\tswitch( state ) {\n\t\tcase 0:\n\t\t\tbreak;\n\t\tcase 1:\n\t\t\tconsole.log(proton.rotation);\n\t\t\tbreak;\n\t\tcase 2:\n\t\tdefault:\n\t\t\tbreak;\n\t};\n}"
+				"name": "Presentation Logic",
+				"source": "var proton = this.getObjectByName(\"Proton\");\nvar precession = this.getObjectByName(\"Precession\");\nvar sphere = this.getObjectByName(\"Sphere\");\nvar Params = function() {\n\tthis.timesteps = 1000;\n\tthis.state = 0;\n\tthis.next_state = function() { keyup( new KeyboardEvent('keyup', {'key': 'n'}) ) };\n\tthis.prev_state = function() { keyup( new KeyboardEvent('keyup', {'key': 'b'}) ) };\n\t\n\tthis.damping_factor = 0.005;\n\tthis.rotating_frame = false;  // the actual controller\n\tthis._rotating_frame = false;  // displayed on interface\n\tthis.override_ref_frame = false;\n\t\n\tthis.rot_x = 0;\n\tthis.rot_y = 0;\n\tthis.rot_z = 0;\n\t\n\t\n};\nvar params = new Params();\nvar start_y_time = 0;\nvar start_z_time = 0;\nvar timesteps = 1000;\nvar camera = this.getObjectByName(\"Camera\");\n\nvar gui = new dat.GUI({\n    height : 5 * 32 - 1\n});\nvar info = gui.addFolder('State Info');\ninfo.add(params, 'timesteps').min(100).max(1000).step(50);\ninfo.add(params, 'state').listen();\ninfo.add(params, 'next_state');\ninfo.add(params, 'prev_state');\ninfo.add(params, '_rotating_frame').name(\"rot_ref\").listen();\ninfo.add(params, 'override_ref_frame').name(\"override_rot_ref\");\ninfo.add(params, 'damping_factor').min(0).max(0.1).step(0.005);\nvar rotation = gui.addFolder('Rotation (deg)');\nrotation.add(params, 'rot_x').name(\"X\").step(0.01).listen();\nrotation.add(params, 'rot_y').name(\"Y\").step(0.01).listen();\nrotation.add(params, 'rot_z').name(\"Z\").step(0.01).listen();\ninfo.open();\nrotation.open();\n\nfunction init() {\n\tvar precession_geometry = new THREE.Geometry();\n\tprecession_geometry.vertices.push(new THREE.Vector3(0, 100, 0), new THREE.Vector3(0, -100, 0));\n\tvar precession_axis = new THREE.Line(\n\t\tprecession_geometry,\n\t\tnew THREE.LineBasicMaterial({color: 0x00BCD4})\n\t);\n\tprecession_axis.material.visible = false;\n\tprecession_axis.material.transparent = true;\n\tprecession_axis.name = \"Precession Axis\";\n\tscene.add(precession_axis);\n\t\n\tvar axis = new THREE.AxesHelper(5)\n\tscene.add(axis);\n}\n\ninit();\n\nfunction update( event ) {\n\tvar time = performance.now() / params.timesteps;\n\tparams.rotation = proton.rotation;\n\tparams.rot_x = (sphere.rotation.x \t\t% (2 * Math.PI))/Math.PI * 180;\n\tparams.rot_y = (precession.rotation.y \t% (2 * Math.PI))/Math.PI * 180;\n\tparams.rot_z = (proton.rotation.z \t\t% (2 * Math.PI))/Math.PI * 180;\n\t\n\tparams.rotating_frame = params._rotating_frame || params.override_ref_frame;\n\tswitch( params.state ) {\n\t\tcase 0:\n\t\t\tbreak;\n\t\tcase 1:\n\t\t\t// Show Precession\n\t\t\t// proton.rotation.y = time - start_y_time;\n\t\t\tbreak;\n\t\tcase 2:\n\t\t\t// Show effect of B0 field\n\t\t\t// proton.rotation.y = time - start_y_time;\n\t\t\tproton.rotation.z = (time - start_z_time) / 5;\n\t\t\tbreak;\n\t\tcase 3:\n\t\t\t// remove precession\n\t\t\tproton.rotation.z = (time - start_z_time) / 5;\n\t\t\tbreak;\n\t\tcase 4:\n\t\t\t// demonstrate t1\n\t\t\t// proton.rotation.y = time - start_y_time;\n\t\t\tproton.rotation.z += -params.damping_factor * ((time - start_z_time) / 5) * Math.sin( proton.rotation.z );\n\t\t\t// this.getObjectByName(\"Precession Axis\").material.opacity -= 0.001;\n\t};\n\tif( !params.rotating_frame ) {\n\t\tprecession.rotation.y = time - start_y_time;\t\n\t}\n}\n\nfunction keyup( event ) {\n\t// console.log(\"Button:\" + event.button);\n\t// console.log(event.key);\n\tif( event.key == \"n\" ) {\n\t\tswitch( params.state ) {\n\t\t\tcase 0:\n\t\t\t\tstart_y_time = performance.now() / params.timesteps;\n\t\t\t\tvar quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0, 0, 1), Math.random(-Math.PI, Math.PI) );\n\t\t\t\tproton.applyQuaternion(quaternion);\n\t\t\t\t// this.getObjectByName(\"Precession Axis\").material.visible = true;\n\t\t\t\t// this.getObjectByName(\"Precession Axis\").material.opacity = 1;\n\t\t\t\tbreak;\n\t\t\tcase 1:\n\t\t\t\tstart_z_time = performance.now() / params.timesteps - proton.rotation.z * 5;\n\t\t\t\t//console.log(proton.rotation);\n\t\t\t\tproton.children[3].visible = true;\n\t\t\t\tbreak;\n\t\t\tcase 2:\n\t\t\t\tparams._rotating_frame = true;\n\t\t\t\tbreak;\n\t\t\tcase 3:\n\t\t\t\tproton.children[3].visible = false;\n\t\t\t\tstart_y_time = performance.now() / params.timesteps - precession.rotation.y;\n\t\t\t\tparams._rotating_frame = false;\n\t\t\t\tbreak;\n\t\t\tdefault:\n\t\t\t\t params.state = 0;\n\t\t};\n\t\tparams.state++;\n\t}\n\tif ( event.key == \"b\" ) {\n\t\tswitch(  params.state ) {\n\t\t\tcase 0:\n\t\t\t\tbreak;\n\t\t\tcase 1:\n\t\t\t\tparams.state = 0;\n\t\t\t\tproton.rotation.z = 0;\n\t\t\t\tproton.rotation.y = 0;\n\t\t\t\t// this.getObjectByName(\"Precession Axis\").material.visible = false;\n\t\t\t\tstart_y_time = 0;\n\t\t\t\tbreak;\n\t\t\tcase 2:\n\t\t\t\tparams._rotating_frame = false;\n\t\t\t\tproton.children[3].visible = false;\n\t\t\t\tstart_z_time = 0;\n\t\t\t\tparams.state = 1;\n\t\t\t\tbreak;\n\t\t\tcase 3:\n\t\t\t\tparams._rotating_frame = true;\n\t\t\t\tproton.children[3].visible = true;\n\t\t\t\tstart_y_time = performance.now() / params.timesteps - precession.rotation.y;\n\t\t\t\tparams.state = 2;\n\t\t\t\tbreak;\n\t\t\t\t\n\t\t};\n\t}\n\tconsole.log(params.state, proton.rotation);\n}"
 			}],
 		"620988DC-59FE-4465-AC20-E09DAEADA148": [
 			{

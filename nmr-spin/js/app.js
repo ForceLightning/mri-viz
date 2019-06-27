@@ -19,11 +19,17 @@ var APP = {
 		this.height = 500;
 
 		this.load = function ( json ) {
-
-			renderer = new THREE.WebGLRenderer( { antialias: true } );
+			
+			renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 			renderer.gammaOutput = true;
 			renderer.setClearColor( 0x000000 );
 			renderer.setPixelRatio( window.devicePixelRatio );
+
+			// labelRenderer = new THREE.CSS2DRenderer();
+			// labelRenderer.setSize( window.innerWidth, window.innerHeight );
+			// labelRenderer.domElement.style.position = 'absolute';
+			// labelRenderer.domElement.style.top = 0;
+			// dom.appendChild( labelRenderer.domElement );
 
 			var project = json.project;
 
@@ -34,6 +40,7 @@ var APP = {
 
 			this.setScene( loader.parse( json.scene ) );
 			this.setCamera( loader.parse( json.camera ) );
+			var controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 			events = {
 				init: [],
@@ -171,6 +178,7 @@ var APP = {
 			}
 
 			renderer.render( scene, camera );
+			// labelRenderer.render( scene, camera );
 
 			prevTime = time;
 
