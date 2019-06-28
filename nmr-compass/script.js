@@ -11,13 +11,11 @@ class Params {
      constructor() {
           this.timesteps = 1000;
           this.state = 0;
-          // this.next_state = function() {  };
-          // this.prev_state = function() {  };
           this.damping_factor = 0.01;
           this.b1 = function () {
                this.bias = (this.bias != 0) ? 0 : -Math.PI / 4;
                $('strong.b1').text((this.bias != 0) ? "On" : "Off");
-               console.log(this.accel);
+               // console.log(this.accel);
                $('img.b1').toggle();
           };
           this.resonating = false;
@@ -28,31 +26,20 @@ class Params {
                // Body.setAngle(compass, 0.5*Math.PI);
                this.bias = (this.bias != 0) ? 0 : -Math.PI / 2;
                $('strong.b1').text((this.bias != 0) ? "On" : "Off");
-               console.log(this.accel);
+               // console.log(this.accel);
           };
           this.angle = 0;
           this.signal = 0;
           this.bias = 0;
           this.accel = 0;
-          this.needle_skin = 0;
-          this.needle_skins = [
-               "images/Compass Needle.png",
-               "images/Proton White.png",
-               "images/Proton Spin.png",
-               "images/Proton.png"
-          ];
-          this.b1_skin = 0;
-          this.b1_skins = [
-               "images/B1 Field.png",
-               "images/B1 Magnet.png",
-               "images/B1 Coil.png"
-          ];
+          this.needle_skins = 0;
+          this.b1_skins = 0;
      }
 }
 
+var compass;
 var params = new Params();
 let engine = Engine.create();
-var compass;
 
 function gui_init() {
      var gui = new dat.GUI({
@@ -63,15 +50,28 @@ function gui_init() {
      info.add(params, 'angle').step(0.01).listen();
      info.add(params, 'signal').step(0.01).listen();
      info.add(params, 'bias').step(0.1).listen();
-     info.add(params, 'accel').name('torque').step(0.0001).listen();
+     info.add(params, 'accel').name('torque').step(0.01).listen();
      var actions = gui.addFolder('Actions');
      actions.add(params, 'b1').name("toggle B1 field");
      actions.add(params, 'ninety').name("90 deg excitation");
      // actions.add(params, 'resonance').name("Toggle Resonance");
      actions.add(params, 'resonating').name("resonance");
      var skins = gui.addFolder('Skinning');
-     skins.add(params, 'needle_skin', {"Compass Needle": 0, "Proton": 1, "Nuclear Spin": 2, "Shaded Proton": 3}).name("needle").listen();
-     skins.add(params, "b1_skin", {"B1 Field": 0, "Bar Magnet": 1, "AC Coil": 2}).name("b1_field").listen();
+     skins.add(params, 'needle_skins', {"Compass Needle": 0, "Proton": 1, "Nuclear Spin": 2, "Shaded Proton": 3}).name("needle").onFinishChange(function(value) {
+          compass.render.sprite.texture = [
+               "images/Compass Needle.png",
+               "images/Proton White.png",
+               "images/Proton Spin.png",
+               "images/Proton.png"
+          ][value];
+     });;
+     skins.add(params, "b1_skins", {"B1 Field": 0, "Bar Magnet": 1, "AC Coil": 2}).name("b1_field").onFinishChange(function(value) {
+          $('#b1').attr("src", [
+               "images/B1 Field.png",
+               "images/B1 Magnet.png",
+               "images/B1 Coil.png"
+          ][value]);
+     });
      info.open();
      actions.open();
 }
@@ -112,7 +112,7 @@ function init() {
                render: {
                     // fillStyle: "a",
                     sprite: {
-                         texture: 'https://dl3.pushbulletusercontent.com/PHk7gPffdiagleOjreHIqB9OxoyxNJWz/Compass%20Needle.png'
+                         texture: 'images/Compass Needle.png'
                     }
                },
                angle: (Math.random()-0.5)*2*Math.PI,
@@ -142,8 +142,6 @@ function init() {
      Render.run(render);
      engine.world.gravity.scale = 0;
      function update() {
-          compass.render.sprite.texture = params.needle_skins[params.needle_skin];
-          $('#b1').attr("src", params.b1_skins[params.b1_skin]);
           params.accel = compass.angularVelocity - params.accel;
           idRAF = requestAnimationFrame(update.bind(this));
           if (params.resonating) {
@@ -163,36 +161,6 @@ function init() {
           $('strong.dr').text(damping_value);
           $('strong.angle').text((compass.angle).toFixed(2));
           $('strong.signal').text(Math.abs((Math.sin(compass.angle).toFixed(2))));
-     }
-     document.onkeypress = function(e) {
-          switch(e.keyCode) {
-               case 114:
-                    Body.setAngle(compass, (Math.random()-0.5)*2*Math.PI);
-                    break;
-               case 43:
-               case 61:
-                    // compass.angle = Math.random(-Math.PI, Math.PI);
-                    params.damping_factor += 0.01;
-                    break;
-               case 45:
-               case 95:
-                    // compass.angle = Math.random(-Math.PI, Math.PI);
-                    params.damping_factor -= 0.01;
-                    break;
-               case 32:
-                    console.log(compass.angle, bias_angle);
-                    break;
-               case 98:
-                    // toggle b1_field
-                    this.bias = (this.bias != 0) ? 0 : -Math.PI/4;
-                    $('strong.b1').text((this.bias != 0) ? "On" : "Off");
-                    $('img.b1').toggle();
-                    break;
-               case 115:
-                    params.needle_skins.push(params.needle_skins.shift());
-                    break;
-          };
-          // console.log(e.keyCode);
      }
      update();
 }
