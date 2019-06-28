@@ -4,50 +4,51 @@ let Engine = Matter.Engine,
     Bodies = Matter.Bodies,
     Events = Matter.Events,
     Mouse = Matter.Mouse,
-    MouseContraint = Matter.Mouseconstrant,
+    MouseConstraint = Matter.Mouseconstraint,
     Body = Matter.Body;
 
-var Params = function() {
-	this.timesteps = 1000;
-	this.state = 0;
-	// this.next_state = function() {  };
-	// this.prev_state = function() {  };
-	
-	this.damping_factor = 0.01;
-	this.b1 = function () {
-          this.bias = (this.bias != 0) ? 0 : -Math.PI/4;
-          $('strong.b1').text((this.bias != 0) ? "On" : "Off");
-          console.log(this.accel);
-          $('img.b1').toggle();
-     };
-     this.resonating = false;
-     this.resonance = function () {
-          this.resonating = !this.resonating;
-     };
-     this.ninety = function () {
-          // Body.setAngle(compass, 0.5*Math.PI);
-          this.bias = (this.bias != 0) ? 0 : -Math.PI/2;
-          $('strong.b1').text((this.bias != 0) ? "On" : "Off");
-          console.log(this.accel);
-     };
-	this.angle = 0;
-     this.signal = 0;
-     this.bias = 0;
-     this.accel = 0;
-     this.needle_skin = 0;
-     this.needle_skins = [
-          "images/Compass Needle.png",
-          "images/Proton White.png",
-          "images/Proton Spin.png",
-          "images/Proton.png"
-     ];
-     this.b1_skin = 0;
-     this.b1_skins = [
-          "images/B1 Field.png",
-          "images/B1 Magnet.png",
-          "images/B1 Coil.png"
-     ];
-};
+class Params {
+     constructor() {
+          this.timesteps = 1000;
+          this.state = 0;
+          // this.next_state = function() {  };
+          // this.prev_state = function() {  };
+          this.damping_factor = 0.01;
+          this.b1 = function () {
+               this.bias = (this.bias != 0) ? 0 : -Math.PI / 4;
+               $('strong.b1').text((this.bias != 0) ? "On" : "Off");
+               console.log(this.accel);
+               $('img.b1').toggle();
+          };
+          this.resonating = false;
+          this.resonance = function () {
+               this.resonating = !this.resonating;
+          };
+          this.ninety = function () {
+               // Body.setAngle(compass, 0.5*Math.PI);
+               this.bias = (this.bias != 0) ? 0 : -Math.PI / 2;
+               $('strong.b1').text((this.bias != 0) ? "On" : "Off");
+               console.log(this.accel);
+          };
+          this.angle = 0;
+          this.signal = 0;
+          this.bias = 0;
+          this.accel = 0;
+          this.needle_skin = 0;
+          this.needle_skins = [
+               "images/Compass Needle.png",
+               "images/Proton White.png",
+               "images/Proton Spin.png",
+               "images/Proton.png"
+          ];
+          this.b1_skin = 0;
+          this.b1_skins = [
+               "images/B1 Field.png",
+               "images/B1 Magnet.png",
+               "images/B1 Coil.png"
+          ];
+     }
+}
 
 var params = new Params();
 let engine = Engine.create();
@@ -201,5 +202,4 @@ gui_init();
 
 $(window).resize(function() {
      init();
-     gui.removeFolder();
 });
