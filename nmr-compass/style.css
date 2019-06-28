@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand:300,500');
+
+* {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+}
+
+body {
+     background: fixed no-repeat center;
+     background-image: url("https://dl3.pushbulletusercontent.com/z84N7850Z1lHFtpcgI7HSNEf0itBtm7W/Compass%20Needle%20copy.png");
+     background-position: 33%, 0%;
+}
+
+img.b1 {
+     display: -webkit-flex;
+     -webkit-align-items: center;
+     display: flex;
+     align-items: center;
+     position: absolute;
+     margin: auto;
+     top: 20%;
+     right: 40%;
+     display: none;
+}
