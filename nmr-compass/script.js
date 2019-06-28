@@ -119,18 +119,6 @@ function init() {
      );
 
      World.add(engine.world, [
-          Bodies.rectangle(width / 2, height + 50, width, 100, {
-               isStatic: true
-          }),
-          Bodies.rectangle(width / 2, -50, width, 100, {
-               isStatic: true
-          }),
-          Bodies.rectangle(-50, height / 2, 100, height, {
-               isStatic: true
-          }),
-          Bodies.rectangle(width + 50, height / 2, 100, height, {
-               isStatic: true
-          }),
           compass
      ]);
 
@@ -162,7 +150,6 @@ gui_init();
 
 $(window).resize(function() {
      // TODO(CANVAS): Fix resizing bugs.
-     params = new Params();
      var width =  $(window).width() * 0.95;
      var height =  $(window).height() * 0.95;
      $('canvas').attr("width", width);
