@@ -4,7 +4,6 @@ let Engine = Matter.Engine,
     Bodies = Matter.Bodies,
     Events = Matter.Events,
     Mouse = Matter.Mouse,
-    MouseConstraint = Matter.Mouseconstraint,
     Body = Matter.Body;
 
 class Params {
@@ -81,8 +80,8 @@ function init() {
      let numm = Math.random();
      $("canvas").remove();
 
-     let width = $(window).width() * 0.9;
-     let height = $(window).height() * 0.9;
+     let width = $(window).width() * 0.95;
+     let height = $(window).height() * 0.95;
      let vmin = Math.min(width, height);
      
      engine.events = {};
@@ -99,7 +98,6 @@ function init() {
                background: "transparent",
                width: width,
                height: height,
-
           }
      });
 
@@ -137,8 +135,6 @@ function init() {
      ]);
 
      Engine.run(engine);
-     var damping_value = 0.01;
-     Engine.run(engine);
      Render.run(render);
      engine.world.gravity.scale = 0;
      function update() {
@@ -157,10 +153,6 @@ function init() {
           compass.angle += -params.damping_factor * compass.angularVelocity                               - 0.001 * Math.sin(compass.angle + params.bias);
           params.signal = Math.abs(Math.sin(compass.angle)) % (2*Math.PI);
           params.angle = compass.angle % (2 * Math.PI);
-          $('strong.b1').text((params.bias != 0) ? "On" : "Off");
-          $('strong.dr').text(damping_value);
-          $('strong.angle').text((compass.angle).toFixed(2));
-          $('strong.signal').text(Math.abs((Math.sin(compass.angle).toFixed(2))));
      }
      update();
 }
@@ -169,5 +161,12 @@ gui_init();
 
 
 $(window).resize(function() {
-     init();
+     // TODO(CANVAS): Fix resizing bugs.
+     params = new Params();
+     var width =  $(window).width() * 0.95;
+     var height =  $(window).height() * 0.95;
+     $('canvas').attr("width", width);
+     $('canvas').attr("height", height);
+     Body.setPosition(compass, Matter.Vector.create(width/2, height/2));
+     // init();
 });
