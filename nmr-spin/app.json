@@ -151,7 +151,7 @@
 					"color": 15790571,
 					"intensity": 1
 				}],
-			"background": 15790571
+			"background": [16777215, 0]
 		}
 	},
 	"scripts": {
